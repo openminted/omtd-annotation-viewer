@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+	<name>Test Type System</name>
+	<description>Type System Definition for tests in
+		eu.openminted.annotationviewer.service.service
+	</description>
+	<vendor>OpenMinTeD</vendor>
+	<version>1.0</version>
+	<types>
+		<typeDescription>
+			<name>eu.openminted.uima.jsog.test.Type</name>
+			<description></description>
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>booleanArray</name>
+					<description>Array of booleans</description>
+					<rangeTypeName>uima.cas.BooleanArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>doubleArray</name>
+					<description>Array of doubles</description>
+					<rangeTypeName>uima.cas.DoubleArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>floatArray</name>
+					<description>Array of floats</description>
+					<rangeTypeName>uima.cas.FloatArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>intArray</name>
+					<description>Array of integers</description>
+					<rangeTypeName>uima.cas.IntegerArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>longArray</name>
+					<description>Array of integers</description>
+					<rangeTypeName>uima.cas.LongArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>shortArray</name>
+					<description>Array of shorts</description>
+					<rangeTypeName>uima.cas.ShortArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>stringArray</name>
+					<description>Array of integers</description>
+					<rangeTypeName>uima.cas.StringArray</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>fsArray</name>
+					<description>Array of feature structures</description>
+					<rangeTypeName>uima.cas.FSArray</rangeTypeName>
+				</featureDescription>
+			</features>
+		</typeDescription>
+	</types>
+</typeSystemDescription>

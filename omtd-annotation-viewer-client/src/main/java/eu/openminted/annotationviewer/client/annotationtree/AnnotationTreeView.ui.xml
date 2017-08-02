@@ -1,0 +1,35 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:m="urn:import:gwt.material.design.client.ui"
+	xmlns:ma="urn:import:gwt.material.design.addins.client">
+	<ui:style type='eu.openminted.annotationviewer.client.annotationtree.AnnotationTreeView.MyStyle'>
+     	.annotationValue {
+     		display: inline-block;
+     		border-color: black;
+     		border-style: solid;
+     		border-width: 1px;
+     		border-radius: 5px;
+     		padding: 2px;
+     		background-color: yellow;
+     		cursor: pointer;
+     		margin: 2px 2px 2px 5px;
+     		line-height: 1em;
+     	}
+     	
+     	.header {
+     		cursor: default;
+     	}
+     	
+     	.body {
+     		cursor: default;
+     		padding: 15px 25px;
+     	}
+     	
+     	
+     </ui:style>
+	<g:HTMLPanel>
+		
+		<m:MaterialCollapsible ui:field="collapsible" accordion="false">
+		</m:MaterialCollapsible>
+	
+	</g:HTMLPanel>
+</ui:UiBinder>

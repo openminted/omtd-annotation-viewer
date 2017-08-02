@@ -1,0 +1,32 @@
+<module>
+	<inherits name="com.google.gwt.user.User" />
+	<!-- Inherit the default GWT style sheet. -->
+	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard' />  -->
+	
+	<source path="client" />
+	<source path="shared" />
+	
+	<inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
+
+	
+
+	<!-- Libs inherits -->
+	  <inherits name="com.google.common.collect.Collect"/>
+	<inherits name="gwt.material.design.GwtMaterialWithJQuery" />
+	<inherits name="gwt.material.design.addins.GwtMaterialAddins" />
+	 <inherits name="gwt.material.design.themes.ThemeBlue"/>
+	<inherits name='com.google.gwt.json.JSON' />
+
+	<!-- Only support recent browsers -->
+	<set-property name="user.agent" value="ie10,gecko1_8,safari" />
+	
+	<!-- Specify the app entry point class. -->
+	<!-- 
+	<entry-point class="eu.openminted.annotationviewer.client.Application" />
+	-->
+	
+	
+
+    <extend-configuration-property name="gin.ginjector.modules"
+            value="eu.openminted.annotationviewer.client.ClientModule"/>
+</module>

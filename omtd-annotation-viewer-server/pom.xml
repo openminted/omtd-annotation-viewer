@@ -1,0 +1,162 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>eu.openminted</groupId>
+	<artifactId>omtd-annotation-viewer-server</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<uimafit.version>2.3.0</uimafit.version>
+		<uima.version>2.9.0</uima.version>
+		<omtd.store.version>0.0.1-SNAPSHOT</omtd.store.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- Need to get the HTML/JS/CSS artifacts produced by GWT into a folder 
+					that Spring Boot serves static content from (see https://spring.io/blog/2013/12/19/serving-static-web-content-with-spring-boot 
+					for more information. The GWT artifact is a WAR file and, as we are creating 
+					a JAR using Spring Boot, the option of overlaying WARs isn't available to 
+					us. So we are simply unpacking the GWT files into the /public folder on the 
+					classpath -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>omtd-annotation-viewer-client</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.outputDirectory}/public</outputDirectory>
+									<!-- <includes>**/*.class,**/*.xml</includes> -->
+									<includes>**/*</includes>
+									<excludes>META-INF/**</excludes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>eu.openminted.annotationviewer.server.Application</mainClass>
+					<arguments></arguments>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>omtd-annotation-viewer-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		
+		
+		<dependency>
+			<groupId>eu.openminted</groupId>
+			<artifactId>omtd-store-rest-client</artifactId>
+			<version>${omtd.store.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimafit-core</artifactId>
+			<version>${uimafit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimaj-json</artifactId>
+			<version>${uima.version}</version>
+		</dependency>
+<!--  
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+		-->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+	<profiles>
+		<profile>
+			<id>production</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>omtd-annotation-viewer-client</artifactId>
+					<version>${project.version}</version>
+					<type>war</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>development</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>eu.openminted.annotationviewer.server.Application</mainClass>
+							<folders>../target/gwt/launcherDir/</folders>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>

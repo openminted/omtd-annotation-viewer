@@ -1,0 +1,27 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+        xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+     <ui:style type='eu.openminted.annotationviewer.client.viewer.DocumentView.MyStyle'>
+     	.annotation {
+     		border-color: black;
+     		border-style: solid;
+     		border-width: 1px 0 1px 0;
+     		border-radius: 0;
+     		background-color: yellow;
+     		cursor: pointer;
+     	}
+     	.annotationBegin {
+     		border-top-left-radius: 5px;
+     		border-bottom-left-radius: 5px;
+     		border-left-width: 1px;
+     	}
+	    .annotationEnd {
+	   	 	border-top-right-radius: 5px;
+     		border-bottom-right-radius: 5px;
+     		border-right-width: 1px;
+	    }
+     </ui:style>
+    <g:HTMLPanel>
+       	<g:HTML ui:field="main"></g:HTML>
+       	<g:HTML ui:field="bottom"></g:HTML>
+    </g:HTMLPanel>
+</ui:UiBinder>
