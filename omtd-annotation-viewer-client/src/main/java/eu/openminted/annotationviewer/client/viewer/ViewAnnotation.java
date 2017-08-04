@@ -1,11 +1,16 @@
 package eu.openminted.annotationviewer.client.viewer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 
-class ViewAnnotation implements Comparable<ViewAnnotation> {
+class ViewAnnotation  {
+	
+	private static int textSize;
 
 	private final int id;
 
@@ -13,7 +18,7 @@ class ViewAnnotation implements Comparable<ViewAnnotation> {
 
 	private final int end;
 
-	private int level = 0;
+	private int level = -1;
 
 	private List<Element> elements = new ArrayList<Element>();
 
@@ -28,6 +33,10 @@ class ViewAnnotation implements Comparable<ViewAnnotation> {
 		this.start = start;
 		this.end = end;
 	}
+	
+	public static void setTextSize(int textSize) {
+		ViewAnnotation.textSize = textSize;
+	}
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
@@ -40,10 +49,21 @@ class ViewAnnotation implements Comparable<ViewAnnotation> {
 	public int getId() {
 		return id;
 	}
-
-	List<Element> getElements() {
-		return elements;
+	
+	public void clear() {
+		elements.clear();
+		level = -1;
 	}
+	
+	public void addElement(Element elem) {
+		elements.add(elem);
+		styleElement(elem);
+	}
+	
+	public Iterator<Element> getElementsIterator() {
+		return elements.iterator();
+	}
+
 
 	public void setForegroundColor(String foregroundColor) {
 		this.foregroundColor = foregroundColor;
@@ -75,6 +95,18 @@ class ViewAnnotation implements Comparable<ViewAnnotation> {
 
 	public void setLevel(int level) {
 		this.level = level;
+		for (Element elem: elements) {
+			styleElement(elem);
+		}
+	}
+	
+	void styleElement(Element elem) {
+		int padding = ((level + 1) * 3) - 1;
+		int lineHeight = (2 * padding) + textSize + 12;
+		Style style = elem.getStyle();
+		style.setPaddingTop(padding, Unit.PX);
+		style.setPaddingBottom(padding, Unit.PX);
+		style.setLineHeight(lineHeight, Unit.PX);
 	}
 
 	public int getLevel() {
@@ -88,34 +120,16 @@ class ViewAnnotation implements Comparable<ViewAnnotation> {
 
 	@Override
 	public int hashCode() {
-		// return toString().hashCode();
 		return id;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof ViewAnnotation)) {
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ViewAnnotation)) {
 			return false;
 		}
-		ViewAnnotation ann = (ViewAnnotation) o;
-		// return (ann.start == start) && (ann.end == end);
-		return ann.id == id;
+		return ( id == ((ViewAnnotation) obj).id);
 	}
 
-	public int compareTo(ViewAnnotation ann) {
-		if (start < ann.start || (start == ann.start && end > ann.end)) {
-			return -1;
-		} else if (start == ann.start && end == ann.end) {
-			return 0;
-		} else {
-			return 1;
-		}
-
-		/*
-		 * if (end > ann.end) return 1; if (end < ann.end) return -1; if (start
-		 * < ann.start) return 1; if (start > ann.start) return -1; return id -
-		 * ann.id;
-		 */
-	}
 
 }

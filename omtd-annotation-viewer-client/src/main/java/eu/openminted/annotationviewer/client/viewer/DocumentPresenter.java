@@ -70,14 +70,15 @@ public class DocumentPresenter extends PresenterWidget<DocumentPresenter.MyView>
 		}
 
 		/*
-		 * getView().addAnnotation(5000, 4, 10, "black", "yellow");
-		 * getView().addAnnotation(5001, 6, 12, "black", "green");
-		 * getView().addAnnotation(5002, 1, 14, "black", "red");
-		 * getView().addAnnotation(5003, 0, 11, "black", "white");
-		 * getView().addAnnotation(5004, 2, 16, "black", "aqua");
-		 * getView().addAnnotation(5005, 0, 15, "black", "pink");
-		 * getView().addAnnotation(5006, 3, 9, "black", "pink");
-		 */
+		  getView().addAnnotation(5000, 4, 10, "black", "yellow", true);
+		  getView().addAnnotation(5001, 6, 12, "black", "green", true);
+		  getView().addAnnotation(5002, 1, 14, "black", "red", true);
+		  getView().addAnnotation(5003, 0, 11, "black", "white", true);
+		  getView().addAnnotation(5004, 2, 16, "black", "aqua", true);
+		  getView().addAnnotation(5005, 0, 15, "black", "pink", true);
+		  getView().addAnnotation(5006, 3, 9, "black", "pink", true);
+		  */
+		 
 
 		getView().redrawAnnotations();
 	}

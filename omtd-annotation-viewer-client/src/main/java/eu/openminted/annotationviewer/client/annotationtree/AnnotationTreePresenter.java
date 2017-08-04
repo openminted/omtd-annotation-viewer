@@ -63,6 +63,10 @@ public class AnnotationTreePresenter extends PresenterWidget<AnnotationTreePrese
 
 	public void setCas(Cas cas, AnnotationTypeStyles typeStyles) {
 		
+		if (true) {
+			//return;
+		}
+		
 		if (this.typeStyles != null) {
 			typeStyles.removeHandler(this);
 		}

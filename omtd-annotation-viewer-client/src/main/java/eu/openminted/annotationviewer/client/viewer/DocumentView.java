@@ -1,10 +1,12 @@
 package eu.openminted.annotationviewer.client.viewer;
 
+import java.lang.Character.UnicodeScript;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +15,9 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.PeekingIterator;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.EventTarget;
@@ -30,6 +35,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+
+import eu.openminted.annotationviewer.client.uima.Annotation;
 
 public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> implements DocumentPresenter.MyView {
 	interface Binder extends UiBinder<HTMLPanel, DocumentView> {
@@ -59,10 +66,11 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 	private Map<Integer, ViewAnnotation> annotationMap = new HashMap<>();
 
 	// This is a set of annotations that occur at each position in the text
-	private List<Set<ViewAnnotation>> annotationIndex = new ArrayList<Set<ViewAnnotation>>();
+	// private List<Set<ViewAnnotation>> annotationIndex = new
+	// ArrayList<Set<ViewAnnotation>>();
 
 	// A count of how many annotations start or end at any given position
-	private List<Integer> beginEndPositions = new ArrayList<Integer>();
+	// private List<Integer> beginEndPositions = new ArrayList<Integer>();
 
 	private boolean updated = false;
 
@@ -81,9 +89,11 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 			// https://stackoverflow.com/questions/39377524/scrolltoview-brings-the-element-at-the-bottom-how-to-scroll-element-to-the-to
 			bottom.getElement().scrollIntoView();
 
-			ann.getElements().get(0).scrollIntoView();
+			Iterator<Element> it = ann.getElementsIterator();
+			if (it.hasNext()) {
+				it.next().scrollIntoView();
+			}
 		}
-
 	}
 
 	@Override
@@ -91,9 +101,11 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ViewAnnotation ann = annotationMap.get(id);
 		ann.setForegroundColor(foregroundColor);
 		ann.setBackgroundColor(backgroundColor);
-		for (Element element : ann.getElements()) {
-			element.getStyle().setBackgroundColor(backgroundColor);
-			element.getStyle().setColor(foregroundColor);
+		Iterator<Element> it = ann.getElementsIterator();
+		while (it.hasNext()) {
+			Element elem = it.next();
+			elem.getStyle().setBackgroundColor(backgroundColor);
+			elem.getStyle().setColor(foregroundColor);
 		}
 	}
 
@@ -102,21 +114,21 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		clear();
 		this.text = text;
 		main.setText(text);
-		for (int i = 0; i < text.length(); i++) {
-			annotationIndex.add(new HashSet<ViewAnnotation>());
-			beginEndPositions.add(0);
-		}
+		/*
+		 * for (int i = 0; i < text.length(); i++) { annotationIndex.add(new
+		 * HashSet<ViewAnnotation>()); beginEndPositions.add(0); }
+		 */
 
 	}
 
 	private void clear() {
 		text = null;
-		annotationIndex.clear();
+		// annotationIndex.clear();
 		annotationMap.clear();
-		beginEndPositions.clear();
+		// beginEndPositions.clear();
 
 		// Add an extra for the text length
-		beginEndPositions.add(0);
+		// beginEndPositions.add(0);
 		updated = false;
 	}
 
@@ -129,6 +141,7 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		if (end > text.length()) {
 			end = text.length();
 		}
+		end--;
 
 		// Add the annotation at the positions between start and end
 		ViewAnnotation ann = new ViewAnnotation(id, start, end);
@@ -136,9 +149,11 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ann.setBackgroundColor(backgroundColor);
 		ann.setVisible(visible);
 		annotationMap.put(id, ann);
-		if (ann.isVisible()) {
-			visibilityChange(ann);
-		}
+		updated = true;
+
+		/*
+		 * if (ann.isVisible()) { visibilityChange(ann); }
+		 */
 	}
 
 	@Override
@@ -146,32 +161,25 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ViewAnnotation ann = annotationMap.get(id);
 		if (ann != null && ann.isVisible() != visible) {
 			ann.setVisible(visible);
-			visibilityChange(ann);
+			// visibilityChange(ann);
 		}
 	}
 
-	private void visibilityChange(ViewAnnotation ann) {
-		int start = ann.getStart();
-		int end = ann.getEnd();
-
-		if (ann.isVisible()) {
-			for (int i = start; i < end; i++) {
-				annotationIndex.get(i).add(ann);
-			}
-
-			beginEndPositions.set(start, beginEndPositions.get(start) + 1);
-			beginEndPositions.set(end, beginEndPositions.get(end) + 1);
-
-		} else {
-			for (int i = start; i < end; i++) {
-				annotationIndex.get(i).remove(ann);
-			}
-			beginEndPositions.set(start, beginEndPositions.get(start) - 1);
-			beginEndPositions.set(end, beginEndPositions.get(end) - 1);
-			ann.getElements().clear();
-		}
-		updated = true;
-	}
+	/*
+	 * private void visibilityChange(ViewAnnotation ann) { int start =
+	 * ann.getStart(); int end = ann.getEnd();
+	 * 
+	 * if (ann.isVisible()) { for (int i = start; i < end; i++) {
+	 * annotationIndex.get(i).add(ann); }
+	 * 
+	 * beginEndPositions.set(start, beginEndPositions.get(start) + 1);
+	 * beginEndPositions.set(end, beginEndPositions.get(end) + 1);
+	 * 
+	 * } else { for (int i = start; i < end; i++) {
+	 * annotationIndex.get(i).remove(ann); } beginEndPositions.set(start,
+	 * beginEndPositions.get(start) - 1); beginEndPositions.set(end,
+	 * beginEndPositions.get(end) - 1); ann.clear(); } updated = true; }
+	 */
 
 	@Override
 	public void redrawAnnotations() {
@@ -189,9 +197,8 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		}
 	}
 
-
 	private boolean updateAnnotations(boolean force) {
-		if (!force && (!main.isAttached() || text == null || annotationIndex.isEmpty())) {
+		if (!force && (!main.isAttached() || text == null)) {
 			// This widget must be attached before annotation rendering
 			// calculations can be performed.
 			return false;
@@ -200,220 +207,207 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		// Clear the text
 		element.setInnerHTML("");
 
+		int textSize = (int) Math.ceil(getComputedFontSize(element));
+		ViewAnnotation.setTextSize(textSize);
+
 		// Clear the existing elements within the annotations
 		for (ViewAnnotation ann : annotationMap.values()) {
-			ann.getElements().clear();
+			ann.clear();
 		}
 
-		// calculateLevels(start, end);
-		calculateLevels();
+		// TODO remove hidden annotations!
 
-		// Computed values are only available once a widget is attached.
-		int textSize = (int) Math.ceil(getComputedFontSize(element));
-
-		// Go through the text and add spans
-		for (int i = 0; i < text.length(); i++) {
-
-			// Find the next position where something changes
-			int spanEnd = i + 1;
-			int spanBegin = i;
-
-			while ((spanEnd < text.length()) && (beginEndPositions.get(spanEnd) <= 0)) {
-				spanEnd++;
-				i++;
-			}
-
-			// Get the annotations that occur in this span ordered by level
-			Set<ViewAnnotation> currentAnnotationSet = new HashSet<ViewAnnotation>();
-			for (int j = spanBegin; j < spanEnd; j++) {
-				currentAnnotationSet.addAll(annotationIndex.get(j));
-			}
-			List<ViewAnnotation> currentAnnotations = new ArrayList<ViewAnnotation>(currentAnnotationSet);
-			Collections.sort(currentAnnotations, new Comparator<ViewAnnotation>() {
-				public int compare(ViewAnnotation a1, ViewAnnotation a2) {
-					return a2.getLevel() - a1.getLevel();
-				}
-			});
-
-			// Insert spans
-			Element parent = element;
-			int leftMargin = 0;
-			int rightMargin = 0;
-			for (int j = 0; j < currentAnnotations.size(); j++) {
-
-				ViewAnnotation ann = currentAnnotations.get(j);
-
-				// Insert the annotation level
-				SpanElement span = Document.get().createSpanElement();
-
-				// span.setAttribute("data-begin", "" + spanBegin);
-				// span.setAttribute("data-end", "" + spanEnd);
-				span.setAttribute("data-id", "" + ann.getId());
-
-				// Calculated style - can't be in stylesheet
-				int padding = ((ann.getLevel() + 1) * 3) - 1;
-				int lineHeight = (2 * padding) + textSize + 12;
-
-				Style style = span.getStyle();
-				span.addClassName(this.style.annotation());
-				if (ann.getBackgroundColor() != null) {
-					style.setBackgroundColor(ann.getBackgroundColor());
-				}
-				if (ann.getForegroundColor() != null) {
-					style.setColor(ann.getForegroundColor());
-				}
-				style.setPaddingTop(padding, Unit.PX);
-				style.setPaddingBottom(padding, Unit.PX);
-				style.setLineHeight(lineHeight, Unit.PX);
-				if (spanBegin != ann.getStart()) {
-					// Setting the margin hides the border(s) of any annotations
-					// starting at the character position represented by this
-					// span
-					if (leftMargin < 0) {
-						style.setMarginLeft(leftMargin, Unit.PX);
-						leftMargin = 0;
-					}
+		// TODO better way of creating list to sort?
+		List<ViewAnnotation> beginAnnotations = new ArrayList<>(annotationMap.values());
+		Collections.sort(beginAnnotations, new Comparator<ViewAnnotation>() {
+			public int compare(ViewAnnotation a1, ViewAnnotation a2) {
+				if (a1.getStart() != a2.getStart()) {
+					return a1.getStart() - a2.getStart();
 				} else {
-					// This span represents the start of an annotation
-					span.addClassName(this.style.annotationBegin());
-					leftMargin--;
+					return a1.getEnd() - a2.getEnd();
 				}
-				if (spanEnd != ann.getEnd()) {
-					// Setting the margin hides the border(s) of any annotations
-					// ending at the character position represented by this span
-					if (rightMargin > 0) {
-						style.setMarginRight(rightMargin, Unit.PX);
-						rightMargin = 0;
-					}
+			}
+		});
+
+		List<ViewAnnotation> endAnnotations = new ArrayList<>(annotationMap.values());
+		Collections.sort(endAnnotations, new Comparator<ViewAnnotation>() {
+			public int compare(ViewAnnotation a1, ViewAnnotation a2) {
+				if (a1.getEnd() != a2.getEnd()) {
+					return a1.getEnd() - a2.getEnd();
 				} else {
-					// This span represents the end of an annotation
-					span.addClassName(this.style.annotationEnd());
-					rightMargin++;
+					return a1.getStart() - a2.getStart();
 				}
+			}
+		});
 
-				ann.getElements().add(span);
-				parent.appendChild(span);
-				parent = span;
+		PeekingIterator<ViewAnnotation> beginIt = Iterators.peekingIterator(beginAnnotations.iterator());
+		PeekingIterator<ViewAnnotation> endIt = Iterators.peekingIterator(endAnnotations.iterator());
+
+		List<ViewAnnotation> openAnns = new ArrayList<>();
+		int lastOffset = 0;
+
+		while (endIt.hasNext()) {
+			// Get the position where the next annotation begin/end occurs
+			final int nextBegin;
+			if (beginIt.hasNext()) {
+				nextBegin = beginIt.peek().getStart();
+			} else {
+				nextBegin = text.length();
+			}
+			final int nextEnd;
+			if (endIt.hasNext()) {
+				nextEnd = endIt.peek().getEnd();
+			} else {
+				nextEnd = text.length();
+			}
+			int offset = Math.min(nextBegin, nextEnd);
+
+			// Create elements between the last offset and the current offset
+			if (lastOffset < offset) {
+				createElements(openAnns, lastOffset, offset - 1);
 			}
 
-			// Insert text
-			String spanText = text.substring(spanBegin, spanEnd);
-			int lastEnd = 0;
-			int nextBreakIndex = spanText.indexOf('\n', lastEnd);
-			while (nextBreakIndex >= 0) {
-				if ((nextBreakIndex - lastEnd) >= 0) {
-					String string = spanText.substring(lastEnd, nextBreakIndex + 1);
-					parent.appendChild(Document.get().createTextNode(string));
-				}
-				parent.appendChild(Document.get().createBRElement());
-				lastEnd = nextBreakIndex + 1;
-				nextBreakIndex = spanText.indexOf('\n', lastEnd);
+			// Get annotations beginning at this position
+			List<ViewAnnotation> beginAnns = new ArrayList<>();
+			while (beginIt.hasNext() && beginIt.peek().getStart() == offset) {
+				beginAnns.add(beginIt.next());
 			}
-			if (lastEnd < spanText.length()) {
-				String substring = spanText.substring(lastEnd, spanText.length());
-				parent.appendChild(Document.get().createTextNode(substring));
+
+			// Add the annotations beginning at this position to those already
+			// open
+			openAnns.addAll(0, beginAnns);
+
+			// Create elements at the current offset
+			createElements(openAnns, offset, offset);
+
+			// Remove annotations, from open list, that end at this position
+			while (endIt.hasNext() && endIt.peek().getEnd() == offset) {
+				openAnns.remove(endIt.next());
 			}
+
+			lastOffset = offset + 1;
 		}
+
+		if (lastOffset < this.text.length()) {
+			// Render any remaining text, without annotations, at the end of the
+			// document
+			if (!openAnns.isEmpty()) {
+				Window.alert("ERROR! openanns should be empty");
+			}
+			createElements(openAnns, lastOffset, this.text.length());
+		}
+
 		updated = false;
 		return true;
 	}
 
-	private void calculateLevels() {
-		// Calculate the levels of each of the annotations
-		List<SortedSet<Integer>> levels = new ArrayList<SortedSet<Integer>>();
-		for (ViewAnnotation ann : annotationMap.values()) {
+	private void createElements(List<ViewAnnotation> anns, int begin, int end) {
+		int level = 0;
+		String spanText = text.substring(begin, end + 1);
 
-			// Find a level that doesn't contain any annotations
-			int freeLevel = 0;
-			while (freeLevel < levels.size()) {
-				Set<Integer> levelPositions = levels.get(freeLevel);
-				boolean found = true;
-				for (int i = ann.getStart(); i < ann.getEnd(); i++) {
-					if (levelPositions.contains(i)) {
-						found = false;
-						break;
-					}
-				}
-				if (found) {
-					break;
-				}
-				freeLevel++;
-			}
+		Element childElement;
+		if (anns.isEmpty()) {
+			addText(spanText, element);
+		} else {
+			leftMargin = 0;
+			rightMargin = 0;
 
-			// Update the level with the positions of the annotation
-			while (freeLevel >= levels.size()) {
-				levels.add(new TreeSet<Integer>());
+			// Process innermost span (containing span text)
+			ViewAnnotation innermostAnn = anns.get(0);
+			childElement = createSpanElement(innermostAnn, begin, end, level);
+			addText(spanText, childElement);
+
+			// Process the other spans
+			for (ViewAnnotation ann : Iterables.skip(anns, 1)) {
+				level++;
+				SpanElement spanElement = createSpanElement(ann, begin, end, level);
+				spanElement.appendChild(childElement);
+				childElement = spanElement;
 			}
-			SortedSet<Integer> levelPositions = levels.get(freeLevel);
-			for (int i = ann.getStart(); i < ann.getEnd(); i++) {
-				levelPositions.add(i);
-			}
-			ann.setLevel(freeLevel);
+			// Add top most element to main document element
+			this.element.appendChild(childElement);
 		}
+
 	}
 
-	private void calculateLevels(int start, int end) {
-		if (start >= end) {
-			return;
-		}
-		if (end > text.length()) {
-			end = text.length();
-		}
+	private int leftMargin;
+	private int rightMargin;
 
-		// Find the position prior to the start that contains no annotations
-		int replaceStart = start;
-		while ((replaceStart > 0) && !annotationIndex.get(replaceStart - 1).isEmpty()) {
-			replaceStart--;
+	private SpanElement createSpanElement(ViewAnnotation ann, int spanBegin, int spanEnd, int level) {
+		if (ann.getLevel() < level) {
+			ann.setLevel(level);
 		}
 
-		// Find the position after the end that contains no annotations
-		int replaceEnd = end;
-		while ((replaceEnd < text.length()) && !annotationIndex.get(replaceEnd).isEmpty()) {
-			replaceEnd++;
+		// Insert the annotation level
+		SpanElement span = Document.get().createSpanElement();
+
+		span.setAttribute("data-id", "" + ann.getId());
+
+		Style style = span.getStyle();
+		span.addClassName(this.style.annotation());
+		if (ann.getBackgroundColor() != null) {
+			style.setBackgroundColor(ann.getBackgroundColor());
+		}
+		if (ann.getForegroundColor() != null) {
+			style.setColor(ann.getForegroundColor());
 		}
 
-		// Get all annotations in the range
-		SortedSet<ViewAnnotation> annotations = new TreeSet<ViewAnnotation>();
-		for (int i = replaceStart; i < replaceEnd; i++) {
-			annotations.addAll(annotationIndex.get(i));
+		ann.addElement(span);
+
+		
+		if (spanBegin != ann.getStart()) {
+			leftMargin--;
+		} else {
+			// This span represents the start of an annotation
+			// Setting the margin hides the border(s) of any annotations
+			// starting at the character position represented by this span
+			span.addClassName(this.style.annotationBegin());
+			if (leftMargin < 0) {
+			//	style.setMarginLeft(1, Unit.PX);
+				leftMargin = 0;
+			}
+		}
+		
+
+		if (spanEnd != ann.getEnd()) {
+			rightMargin--;
+		} else {
+			// This span represents the end of an annotation
+			// Setting the margin hides the border(s) of any annotations ending
+			// at the character position represented by this span
+			span.addClassName(this.style.annotationEnd());
+			if (rightMargin < 0) {
+				style.setMarginRight(-1, Unit.PX);
+				rightMargin = 0;
+			}
 		}
 
-		// Calculate the levels of each of the annotations
-		List<SortedSet<Integer>> levels = new ArrayList<SortedSet<Integer>>();
-		for (ViewAnnotation ann : annotations) {
+		return span;
+	}
 
-			// Find a level that doesn't contain any annotations
-			int freeLevel = 0;
-			while (freeLevel < levels.size()) {
-				Set<Integer> levelPositions = levels.get(freeLevel);
-				boolean found = true;
-				for (int i = ann.getStart(); i < ann.getEnd(); i++) {
-					if (levelPositions.contains(i)) {
-						found = false;
-						break;
-					}
-				}
-				if (found) {
-					break;
-				}
-				freeLevel++;
+	private void addText(String text, Element elem) {
+		int lastIndex = 0;
+		do {
+			int nextBreakIndex = text.indexOf('\n', lastIndex);
+
+			final String string;
+			if (nextBreakIndex >= 0) {
+				string = text.substring(lastIndex, nextBreakIndex + 1);
+				elem.appendChild(Document.get().createTextNode(string));
+				elem.appendChild(Document.get().createBRElement());
+			} else {
+				string = text.substring(lastIndex);
+				elem.appendChild(Document.get().createTextNode(string));
 			}
 
-			// Update the level with the positions of the annotation
-			while (freeLevel >= levels.size()) {
-				levels.add(new TreeSet<Integer>());
-			}
-			SortedSet<Integer> levelPositions = levels.get(freeLevel);
-			for (int i = ann.getStart(); i < ann.getEnd(); i++) {
-				levelPositions.add(i);
-			}
-			ann.setLevel(freeLevel);
-		}
+			lastIndex += string.length();
+
+		} while (lastIndex < text.length());
 	}
 
 	@UiHandler("main")
 	void onMouseUp(ClickEvent event) {
-		
+
 		EventTarget target = event.getNativeEvent().getEventTarget();
 		if (!Element.is(target)) {
 			return;
@@ -441,70 +435,6 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		if (ids.size() > 0) {
 			getUiHandlers().onAnnotationsSelected(ids);
 		}
-	}
-
-	// UiHandler("main")
-	void onMouseUpOriginal(ClickEvent event) {
-		JSSelection selection = JSSelection.getSelection();
-
-		if (selection.getStartNode() == null) {
-			return;
-		}
-		int begin = findOffset(selection.getStartNode(), selection.getStartOffset());
-		Set<ViewAnnotation> set = annotationIndex.get(begin);
-		if (!set.isEmpty()) {
-			List<Integer> ids = new ArrayList<Integer>(set.size());
-			for (ViewAnnotation ann : set) {
-				if (ann.isVisible()) {
-					ids.add(ann.getId());
-				}
-			}
-			Window.alert(begin + " " + ids.size() + "");
-
-			if (!ids.isEmpty()) {
-				getUiHandlers().onAnnotationsSelected(ids);
-			}
-		}
-	}
-
-	private int findOffset(Node findNode, int nodeOffset) {
-
-		if (findNode.getNodeType() != Node.TEXT_NODE) {
-			Element findElement = (Element) findNode;
-			findNode = findElement.getChild(nodeOffset);
-			nodeOffset = 0;
-		}
-
-		Node node = element.getFirstChild();
-		int count = 0;
-		while ((node != null) && (node != findNode)) {
-			if (node.getNodeType() == Node.TEXT_NODE) {
-				Text text = Text.as(node);
-				count += text.getData().length();
-			}
-
-			if (node.hasChildNodes()) {
-				node = node.getFirstChild();
-			} else {
-				node = getNextNode(element, node);
-			}
-		}
-		if (node == null) {
-			return -1;
-		}
-
-		return nodeOffset + count;
-	}
-
-	private Node getNextNode(Node topLevel, Node node) {
-		if (node == topLevel) {
-			return null;
-		}
-		Node next = node.getNextSibling();
-		if (next != null) {
-			return next;
-		}
-		return getNextNode(topLevel, node.getParentNode());
 	}
 
 	static native float getComputedFontSize(Element element) /*-{

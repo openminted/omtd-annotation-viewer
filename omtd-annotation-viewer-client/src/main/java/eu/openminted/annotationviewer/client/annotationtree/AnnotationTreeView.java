@@ -111,7 +111,6 @@ public class AnnotationTreeView extends ViewWithUiHandlers<AnnotationTreeUiHandl
 	public void addAnnotation(Annotation ann, AnnotationTypeStyles styles) {
 
 		final Div content = createAnnotationContent(ann, styles);
-
 		boolean hasContent = (content != null);
 		MaterialCollapsibleHeader header = createHeader(ann, styles, hasContent);
 
@@ -121,11 +120,13 @@ public class AnnotationTreeView extends ViewWithUiHandlers<AnnotationTreeUiHandl
 			item.setDataAttribute("document-level", "true");
 		}
 		item.add(header);
+		
+		
 		if (content != null) {
 			MaterialCollapsibleBody body = new MaterialCollapsibleBody(content);
 			body.getElement().addClassName(style.body());
 			item.add(body);
-		}
+		} 
 		AnnotationTypeStyle typeStyle = styles.getStyle(ann.getTypeName());
 		item.setVisible(typeStyle.isVisible());
 
@@ -437,11 +438,12 @@ public class AnnotationTreeView extends ViewWithUiHandlers<AnnotationTreeUiHandl
 		Style style = header.getElement().getStyle();
 		style.setBackgroundColor(typeStyle.getBackgroundColor());
 		style.setColor(typeStyle.getForegroundColor());
-		style.setColor(typeStyle.getForegroundColor());
 		
+		/*
 		header.setTooltip(ann.getTypeName());
 		header.setTooltipPosition(Position.LEFT);
 		header.setTooltipDelayMs(50);
+		*/
 
 		if (hasContent) {
 			header.add(new MaterialIcon(IconType.ARROW_DROP_DOWN));
