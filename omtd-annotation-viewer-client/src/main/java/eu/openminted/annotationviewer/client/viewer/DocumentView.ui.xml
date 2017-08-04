@@ -13,15 +13,15 @@
      		border-top-left-radius: 5px;
      		border-bottom-left-radius: 5px;
      		border-left-width: 1px;
-     		#padding-left: 1px;
-     		#margin-left: 1px;
+     		//padding-left: 1px;
+     		//margin-left: 1px;
      	}
 	    .annotationEnd {
 	   	 	border-top-right-radius: 5px;
      		border-bottom-right-radius: 5px;
      		border-right-width: 1px;
-     		#padding-right: 1px;
-     		#margin-right: 4px;
+     		//padding-right: 1px;
+     		//margin-right: 4px;
 	    }
      </ui:style>
     <g:HTMLPanel>

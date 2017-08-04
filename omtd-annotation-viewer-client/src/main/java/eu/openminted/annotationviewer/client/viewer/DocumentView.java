@@ -60,18 +60,8 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 	HTML bottom;
 
 	private Element element;
-
 	private String text = null;
-
 	private Map<Integer, ViewAnnotation> annotationMap = new HashMap<>();
-
-	// This is a set of annotations that occur at each position in the text
-	// private List<Set<ViewAnnotation>> annotationIndex = new
-	// ArrayList<Set<ViewAnnotation>>();
-
-	// A count of how many annotations start or end at any given position
-	// private List<Integer> beginEndPositions = new ArrayList<Integer>();
-
 	private boolean updated = false;
 
 	@Inject
@@ -114,21 +104,12 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		clear();
 		this.text = text;
 		main.setText(text);
-		/*
-		 * for (int i = 0; i < text.length(); i++) { annotationIndex.add(new
-		 * HashSet<ViewAnnotation>()); beginEndPositions.add(0); }
-		 */
-
 	}
 
 	private void clear() {
 		text = null;
-		// annotationIndex.clear();
+		//element.setInnerHTML("");
 		annotationMap.clear();
-		// beginEndPositions.clear();
-
-		// Add an extra for the text length
-		// beginEndPositions.add(0);
 		updated = false;
 	}
 
@@ -150,10 +131,6 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ann.setVisible(visible);
 		annotationMap.put(id, ann);
 		updated = true;
-
-		/*
-		 * if (ann.isVisible()) { visibilityChange(ann); }
-		 */
 	}
 
 	@Override
@@ -161,25 +138,10 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ViewAnnotation ann = annotationMap.get(id);
 		if (ann != null && ann.isVisible() != visible) {
 			ann.setVisible(visible);
-			// visibilityChange(ann);
+			updated = true;
 		}
 	}
 
-	/*
-	 * private void visibilityChange(ViewAnnotation ann) { int start =
-	 * ann.getStart(); int end = ann.getEnd();
-	 * 
-	 * if (ann.isVisible()) { for (int i = start; i < end; i++) {
-	 * annotationIndex.get(i).add(ann); }
-	 * 
-	 * beginEndPositions.set(start, beginEndPositions.get(start) + 1);
-	 * beginEndPositions.set(end, beginEndPositions.get(end) + 1);
-	 * 
-	 * } else { for (int i = start; i < end; i++) {
-	 * annotationIndex.get(i).remove(ann); } beginEndPositions.set(start,
-	 * beginEndPositions.get(start) - 1); beginEndPositions.set(end,
-	 * beginEndPositions.get(end) - 1); ann.clear(); } updated = true; }
-	 */
 
 	@Override
 	public void redrawAnnotations() {
@@ -211,14 +173,17 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		ViewAnnotation.setTextSize(textSize);
 
 		// Clear the existing elements within the annotations
+		List<ViewAnnotation> visibleAnnotations = new ArrayList<>();
 		for (ViewAnnotation ann : annotationMap.values()) {
 			ann.clear();
+			if ( ann.isVisible() ) {
+				visibleAnnotations.add(ann);
+			}
 		}
 
 		// TODO remove hidden annotations!
-
 		// TODO better way of creating list to sort?
-		List<ViewAnnotation> beginAnnotations = new ArrayList<>(annotationMap.values());
+		List<ViewAnnotation> beginAnnotations = new ArrayList<>(visibleAnnotations);
 		Collections.sort(beginAnnotations, new Comparator<ViewAnnotation>() {
 			public int compare(ViewAnnotation a1, ViewAnnotation a2) {
 				if (a1.getStart() != a2.getStart()) {
@@ -229,7 +194,7 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 			}
 		});
 
-		List<ViewAnnotation> endAnnotations = new ArrayList<>(annotationMap.values());
+		List<ViewAnnotation> endAnnotations = new ArrayList<>(visibleAnnotations);
 		Collections.sort(endAnnotations, new Comparator<ViewAnnotation>() {
 			public int compare(ViewAnnotation a1, ViewAnnotation a2) {
 				if (a1.getEnd() != a2.getEnd()) {
