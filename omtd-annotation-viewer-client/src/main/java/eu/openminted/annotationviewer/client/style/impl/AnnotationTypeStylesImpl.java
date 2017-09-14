@@ -6,14 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
-
 import eu.openminted.annotationviewer.client.style.AnnotationTypeStyle;
 import eu.openminted.annotationviewer.client.style.AnnotationTypeStyles;
-import gwt.material.design.client.constants.Color;
-import gwt.material.design.client.ui.html.Div;
 
 public class AnnotationTypeStylesImpl implements AnnotationTypeStyles {
 

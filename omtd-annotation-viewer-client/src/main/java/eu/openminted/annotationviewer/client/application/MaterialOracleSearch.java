@@ -13,7 +13,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 
-import gwt.material.design.addins.client.autocomplete.MaterialAutoComplete;
 import gwt.material.design.client.base.HasActive;
 import gwt.material.design.client.base.HasSearchHandlers;
 import gwt.material.design.client.constants.Color;
@@ -22,7 +21,6 @@ import gwt.material.design.client.constants.InputType;
 import gwt.material.design.client.events.SearchFinishEvent.SearchFinishHandler;
 import gwt.material.design.client.events.SearchNoResultEvent.SearchNoResultHandler;
 import gwt.material.design.client.ui.MaterialIcon;
-import gwt.material.design.client.ui.MaterialSearch;
 import gwt.material.design.client.ui.MaterialSearchResult;
 import gwt.material.design.client.ui.MaterialValueBox;
 import gwt.material.design.client.ui.html.Label;

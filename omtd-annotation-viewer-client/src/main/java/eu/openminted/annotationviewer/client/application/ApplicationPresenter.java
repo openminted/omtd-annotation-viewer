@@ -2,12 +2,11 @@ package eu.openminted.annotationviewer.client.application;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Sets;
+//import com.google.common.collect.Sets;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle;
@@ -33,7 +32,6 @@ import eu.openminted.annotationviewer.client.style.impl.AnnotationTypeStylesImpl
 import eu.openminted.annotationviewer.client.typelist.TypeListPresenter;
 import eu.openminted.annotationviewer.client.typelist.event.SetTypeVisibilityEvent;
 import eu.openminted.annotationviewer.client.typelist.event.SetTypeVisibilityEvent.SetTypeVisibilityHandler;
-import eu.openminted.annotationviewer.client.uima.Annotation;
 import eu.openminted.annotationviewer.client.uima.Cas;
 import eu.openminted.annotationviewer.client.uima.CasUtils;
 import eu.openminted.annotationviewer.client.viewer.DocumentPresenter;
@@ -63,7 +61,8 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 	interface MyProxy extends ProxyPlace<ApplicationPresenter> {
 	}
 
-	private final static Set<String> featuresToIgnore = Sets.newHashSet("sofa", "begins", "ends");
+	// private final static Set<String> featuresToIgnore = Sets.newHashSet("sofa",
+	// "begins", "ends");
 
 	static final PermanentSlot<AnnotationTreePresenter> SLOT_ANNOTATION_TREE = new PermanentSlot<>();
 	static final PermanentSlot<DocumentPresenter> SLOT_DOCUMENT = new PermanentSlot<>();
@@ -111,7 +110,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 		this.documentId = request.getParameter("documentId", "");
 		initialViewId = request.getParameter("viewId", null);
 
-		// Window.alert(documentId);
 		retrieveDocument(archiveId, documentId);
 	}
 
@@ -191,12 +189,9 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 		pendingRequest = new SuggestOracle.Request(query);
 
 		// Todo only do this on a delay
-		// Window.alert("hello");
 		oracle.requestSuggestions(pendingRequest, (req, res) -> {
 			Window.alert("" + (res.getSuggestions().size() + res.getMoreSuggestionsCount()));
 		});
-
-		// Window.alert("bye");
 	}
 
 	private void setView(String viewId) {
@@ -217,14 +212,13 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 				viewCas = newCas;
 
 				/*
-				 * oracle = new MultiWordSuggestOracle("|");
-				 * Iterator<Annotation> it = viewCas.getAllAnnotations(); while
-				 * (it.hasNext()) { Annotation ann = it.next(); Iterator<String>
-				 * featureIt = ann.getFeatureNames(); while
+				 * oracle = new MultiWordSuggestOracle("|"); Iterator<Annotation> it =
+				 * viewCas.getAllAnnotations(); while (it.hasNext()) { Annotation ann =
+				 * it.next(); Iterator<String> featureIt = ann.getFeatureNames(); while
 				 * (featureIt.hasNext()) { String feature = featureIt.next(); if
-				 * (featuresToIgnore.contains(feature)) { continue; } String
-				 * value = ann.getFeatureValueAsString(feature); if (value !=
-				 * null) { oracle.add(feature + ':' + value); } }
+				 * (featuresToIgnore.contains(feature)) { continue; } String value =
+				 * ann.getFeatureValueAsString(feature); if (value != null) { oracle.add(feature
+				 * + ':' + value); } }
 				 * 
 				 * }
 				 */
@@ -233,9 +227,9 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 	}
 
 	/**
-	 * This is required to stop the selected annotation list item being obscured
-	 * by the fixed header (as it would otherwise be positioned right at the top
-	 * page, directly under the header).
+	 * This is required to stop the selected annotation list item being obscured by
+	 * the fixed header (as it would otherwise be positioned right at the top page,
+	 * directly under the header).
 	 */
 	private void scrollFix() {
 		Window.scrollTo(Window.getScrollTop(), Window.getScrollTop() - 64);

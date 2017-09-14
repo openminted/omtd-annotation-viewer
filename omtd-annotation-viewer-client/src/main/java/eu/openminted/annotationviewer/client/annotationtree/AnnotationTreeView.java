@@ -16,12 +16,9 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.CssResource;
@@ -30,7 +27,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
@@ -38,20 +34,15 @@ import eu.openminted.annotationviewer.client.style.AnnotationTypeStyle;
 import eu.openminted.annotationviewer.client.style.AnnotationTypeStyles;
 import eu.openminted.annotationviewer.client.uima.Annotation;
 import eu.openminted.annotationviewer.client.uima.Cas;
-import gwt.material.design.client.constants.ButtonType;
 import gwt.material.design.client.constants.Color;
 import gwt.material.design.client.constants.IconType;
 import gwt.material.design.client.constants.Position;
-import gwt.material.design.client.ui.MaterialButton;
 import gwt.material.design.client.ui.MaterialCollapsible;
 import gwt.material.design.client.ui.MaterialCollapsibleBody;
 import gwt.material.design.client.ui.MaterialCollapsibleHeader;
 import gwt.material.design.client.ui.MaterialCollapsibleItem;
-import gwt.material.design.client.ui.MaterialDivider;
-import gwt.material.design.client.ui.MaterialHeader;
 import gwt.material.design.client.ui.MaterialIcon;
 import gwt.material.design.client.ui.MaterialLabel;
-import gwt.material.design.client.ui.MaterialLink;
 import gwt.material.design.client.ui.animate.MaterialAnimation;
 import gwt.material.design.client.ui.animate.Transition;
 import gwt.material.design.client.ui.html.Div;
@@ -439,11 +430,11 @@ public class AnnotationTreeView extends ViewWithUiHandlers<AnnotationTreeUiHandl
 		style.setBackgroundColor(typeStyle.getBackgroundColor());
 		style.setColor(typeStyle.getForegroundColor());
 		
-		/*
+		
 		header.setTooltip(ann.getTypeName());
 		header.setTooltipPosition(Position.LEFT);
 		header.setTooltipDelayMs(50);
-		*/
+		
 
 		if (hasContent) {
 			header.add(new MaterialIcon(IconType.ARROW_DROP_DOWN));

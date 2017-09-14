@@ -1,16 +1,12 @@
 package eu.openminted.annotationviewer.client.uima.jsog;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONException;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
-
 import eu.openminted.annotationviewer.client.uima.Annotation;
 import eu.openminted.annotationviewer.client.uima.Cas;
 import eu.openminted.annotationviewer.client.uima.Sofa;

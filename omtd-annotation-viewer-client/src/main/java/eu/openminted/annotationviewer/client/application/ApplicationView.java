@@ -1,7 +1,5 @@
 package eu.openminted.annotationviewer.client.application;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -10,8 +8,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,15 +18,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 
 import eu.openminted.annotationviewer.client.uima.Cas;
-import gwt.material.design.addins.client.autocomplete.MaterialAutoComplete;
-import gwt.material.design.client.base.SearchObject;
 import gwt.material.design.client.constants.Color;
-import gwt.material.design.client.constants.IconPosition;
-import gwt.material.design.client.constants.IconType;
-import gwt.material.design.client.events.SearchFinishEvent;
 import gwt.material.design.client.ui.MaterialButton;
-import gwt.material.design.client.ui.MaterialCard;
-import gwt.material.design.client.ui.MaterialCardTitle;
 import gwt.material.design.client.ui.MaterialContainer;
 import gwt.material.design.client.ui.MaterialDropDown;
 import gwt.material.design.client.ui.MaterialHeader;
@@ -38,12 +27,6 @@ import gwt.material.design.client.ui.MaterialLabel;
 import gwt.material.design.client.ui.MaterialModal;
 import gwt.material.design.client.ui.MaterialNavBar;
 import gwt.material.design.client.ui.MaterialNavBrand;
-import gwt.material.design.client.ui.MaterialPanel;
-import gwt.material.design.client.ui.MaterialSearch;
-import gwt.material.design.client.ui.MaterialSearchResult;
-import gwt.material.design.client.ui.MaterialTitle;
-import gwt.material.design.client.ui.MaterialToast;
-import gwt.material.design.client.ui.html.Header;
 import gwt.material.design.client.ui.html.Span;
 
 public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> implements ApplicationPresenter.MyView {
@@ -120,6 +103,8 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 
 	@Override
 	public void showApplication() {
+		error.setVisible(false);
+		
 		header.setVisible(true);
 		container.setVisible(true);
 	}
@@ -136,6 +121,9 @@ public class ApplicationView extends ViewWithUiHandlers<ApplicationUiHandlers> i
 		card.add(title);
 		card.add(new MaterialLabel(message));
 		error.add(card); */
+		header.setVisible(false);
+		container.setVisible(false);
+		
 		errorMessage.setText(message);
 		error.setVisible(true);
 		

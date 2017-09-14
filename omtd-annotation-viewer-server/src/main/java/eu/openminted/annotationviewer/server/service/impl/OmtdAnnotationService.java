@@ -38,7 +38,7 @@ public class OmtdAnnotationService implements AnnotationService {
 	protected CAS loadXmiCas(String archiveId, String documentId)
 			throws IOException, InvalidXMLException, ResourceInitializationException, SAXException {
 
-		String documentPath = AnnotationServiceUtils.getDocumentPath(archiveId, documentId);
+		String documentPath = AnnotationServiceUtils.getDocumentPath(archiveId, documentId + ".xmi");
 		Path outputPath = Files.createTempFile(documentId, ".xmi");
 		StoreResponse response = omtdStore.downloadFile(documentPath, outputPath.toString());
 		TypeSystemDescription tsd = loadXmlTypeSystem(archiveId);
@@ -49,7 +49,6 @@ public class OmtdAnnotationService implements AnnotationService {
 		return cas;
 	}
 
-	// TODO will it be a single type system file per archive or per document?
 	TypeSystemDescription loadXmlTypeSystem(String archiveId) throws InvalidXMLException, IOException {
 		String typeSystemPath = AnnotationServiceUtils.getTypeSystemPath(archiveId);
 		Path outputPath = Files.createTempFile(archiveId, ".ts.xml");

@@ -38,7 +38,7 @@ public class AnnotationRestApiImpl implements AnnotationRestApi {
 
 			RequestBuilder builder = new RequestBuilder(RequestBuilder.GET,
 					url + "document/" + archiveId + '/' + documentId);
-			Request request = builder.sendRequest(null, new RequestCallback() {
+			builder.sendRequest(null, new RequestCallback() {
 				public void onError(Request request, Throwable exception) {
 					// displayError("Couldn't retrieve JSON");
 				}

@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.user.client.Window;
-
 import eu.openminted.annotationviewer.client.uima.Annotation;
 import eu.openminted.annotationviewer.client.uima.Cas;
 import eu.openminted.annotationviewer.client.uima.Sofa;

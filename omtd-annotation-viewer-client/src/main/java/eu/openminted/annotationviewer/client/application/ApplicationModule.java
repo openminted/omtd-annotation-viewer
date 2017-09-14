@@ -14,10 +14,7 @@ public class ApplicationModule extends AbstractPresenterModule {
     	install(new DocumentModule());
     	install(new AnnotationTreeModule());
     	install(new TypeListModule());
-
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
-                ApplicationPresenter.MyProxy.class);
-        
-       
+                ApplicationPresenter.MyProxy.class); 
     }
 }

@@ -142,7 +142,6 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 		}
 	}
 
-
 	@Override
 	public void redrawAnnotations() {
 		if (updated) {
@@ -181,8 +180,6 @@ public class DocumentView extends ViewWithUiHandlers<DocumentUiHandlers> impleme
 			}
 		}
 
-		// TODO remove hidden annotations!
-		// TODO better way of creating list to sort?
 		List<ViewAnnotation> beginAnnotations = new ArrayList<>(visibleAnnotations);
 		Collections.sort(beginAnnotations, new Comparator<ViewAnnotation>() {
 			public int compare(ViewAnnotation a1, ViewAnnotation a2) {

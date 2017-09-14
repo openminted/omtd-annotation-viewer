@@ -28,7 +28,7 @@ public class TypeListPresenter extends PresenterWidget<TypeListPresenter.MyView>
 		void addType(String typeName, String backgroundColor, String foregroundColor, boolean visible);
 	}
 
-	private Cas cas;
+	//private Cas cas;
 
 	@Inject
 	public TypeListPresenter(EventBus eventBus, MyView view) {
@@ -37,7 +37,7 @@ public class TypeListPresenter extends PresenterWidget<TypeListPresenter.MyView>
 	}
 
 	public void setCas(Cas cas, AnnotationTypeStyles typeStyles) {
-		this.cas = cas;
+//		this.cas = cas;
 
 		getView().clear();
 
