@@ -20,7 +20,7 @@ One way to set configuration parameter values is using a `application.properties
 viewer.omtd.store.url=http://store.openminted.eu:9000
 ```
 
-When building the Annotation Viewer from the source code, especially during development, the simplest way of setting this configuration parameter is to modify the `src/main/resources/applications.properties` file in the `omtd-annotation-viewer-server` project.
+When building the Annotation Viewer from the source code, especially during development, the simplest way of setting this configuration parameter is to modify the `[applications.properties](https://github.com/openminted/omtd-annotation-viewer/blob/master/omtd-annotation-viewer-server/src/main/resources/application.properties)` file in the `omtd-annotation-viewer-server` project.
 
 ## Demonstration mode
 
