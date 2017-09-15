@@ -89,8 +89,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		
-		
 		<dependency>
 			<groupId>eu.openminted</groupId>
 			<artifactId>omtd-store-rest-client</artifactId>
