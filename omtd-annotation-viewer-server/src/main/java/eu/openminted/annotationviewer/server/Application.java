@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.uima.UIMAException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,8 @@ import eu.openminted.annotationviewer.server.service.impl.OmtdAnnotationService;
 
 @SpringBootApplication
 public class Application {
+	
+	private final Logger log = LoggerFactory.getLogger(Application.class);
 
 	// If this value is not set, the application will enter demo mode.
 	@Value("${viewer.omtd.store.url:#{null}}")
@@ -25,9 +29,10 @@ public class Application {
 	@Bean
 	AnnotationService annotationService() throws MalformedURLException {
 		if (omtdStoreUrl != null) {
+			log.info("running in Production Mode");
 			return new OmtdAnnotationService(omtdStoreUrl);
 		} else {
-			// TODO demo service if set
+			log.info("running in Demo Mode");
 			return new DemoAnnotationService();
 		}
 	}

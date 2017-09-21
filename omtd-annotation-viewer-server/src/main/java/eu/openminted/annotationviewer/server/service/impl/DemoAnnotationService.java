@@ -38,8 +38,8 @@ public class DemoAnnotationService implements AnnotationService {
 
 	@Override
 	public void writeDocumentJson(String archiveId, String documentId, OutputStream os) throws Exception {
-		archiveId = ARCHIVE_PATH_PREFIX + "archive1";
-		documentId = "document1.xmi";
+		archiveId = ARCHIVE_PATH_PREFIX + "Archive1";
+		documentId = "Document1.xmi";
 		TypeSystemDescription tsd = loadTypeSystem(archiveId);
 		addTestTypes(tsd);
 		CAS cas = loadCas(archiveId, documentId, tsd);
@@ -140,8 +140,8 @@ public class DemoAnnotationService implements AnnotationService {
 	}
 
 	public static void main(String[] args) throws Exception {
-		final String archiveId = ARCHIVE_PATH_PREFIX + "archive1";
-		final String documentId = "document1.xmi";
+		final String archiveId = ARCHIVE_PATH_PREFIX + "Archive1";
+		final String documentId = "Document1.xmi";
 
 		DemoAnnotationService service = new DemoAnnotationService();
 		TypeSystemDescription tsd = service.loadTypeSystem(archiveId);
