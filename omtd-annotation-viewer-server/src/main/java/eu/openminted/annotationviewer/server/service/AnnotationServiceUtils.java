@@ -17,13 +17,13 @@ import eu.openminted.uima.jsog.JsogCasSerialiser;
 public class AnnotationServiceUtils {
 
 	private static final String TYPE_SYSTEM_XML_FILENAME = "typesystem.xml";
-	private static final String DOCUMENTS_FOLDER_FILENAME = "documents";
+	private static final String DOCUMENTS_FOLDER_FILENAME = "annotations";
 
 	private static final JsonFactory JSON_FACTORY = new JsonFactory();
 	private static final JsogCasSerialiser jsogCasSerialiser = new JsogCasSerialiser();
 
 	public static String getTypeSystemPath(String archiveId) {
-		return archiveId + '/' + TYPE_SYSTEM_XML_FILENAME;
+		return archiveId + "/annotations/" + TYPE_SYSTEM_XML_FILENAME;
 	}
 
 	public static String getDocumentPath(String archiveId, String documentId) {
