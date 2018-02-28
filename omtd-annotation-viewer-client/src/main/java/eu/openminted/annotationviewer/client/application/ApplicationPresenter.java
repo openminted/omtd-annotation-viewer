@@ -120,7 +120,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 	}
 
 	private void retrieveDocument(String archiveId, String documentId) {
-		AnnotationRestApi annotationService = new AnnotationRestApiImpl("http://localhost:8080/api/");
+		AnnotationRestApi annotationService = new AnnotationRestApiImpl("./api/");
 		annotationService.getDocument(archiveId, documentId).subscribe(this::onGetDocumentRetrieved,
 				this::onGetDocumentError);
 	}
